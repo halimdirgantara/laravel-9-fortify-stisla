@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index($subdomain) {
-        dd($subdomain);
+    public function index() {
         return view('admin.dashboard.index');
     }
 }

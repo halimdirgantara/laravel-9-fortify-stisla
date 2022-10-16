@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguangeController;
 
 /*
@@ -18,3 +19,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/register/lang', [LanguangeController::class, 'change'])->name('changeLang');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('dashboard', [HomeController::Class, 'index'])->name('dashboard');
+});
