@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LanguangeController;
 
 /*
@@ -22,4 +23,8 @@ Route::get('/register/lang', [LanguangeController::class, 'change'])->name('chan
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [HomeController::Class, 'index'])->name('dashboard');
+
+    //User Profile
+    Route::get('profile', [ProfileController::Class, 'index'])->name('user.profile');
+    Route::put('profile/update', [ProfileController::Class, 'update'])->name('update.profile');
 });

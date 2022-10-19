@@ -51,8 +51,12 @@
             @include('components.sidebar')
 
             <!-- Content -->
-            @yield('main')
-
+            <div class="main-content">
+                <section class="section">
+                    @include('components.alert')
+                    @yield('main')
+                </section>
+            </div>
             <!-- Footer -->
             @include('components.footer')
         </div>
