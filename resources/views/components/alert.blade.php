@@ -1,17 +1,25 @@
 @if (session('alert-message'))
-    <div class="alert alert-{{ session('alert-type') }}">
-        {{ session('alert-message') }}
-    </div>
+    @push('scripts')
+        <script type="text/javascript">
+            Swal.fire({
+                icon: '{{ session('alert-icon') }}',
+                title: '{{ session('alert-type') }}',
+                text: '{{ session('alert-message') }}'
+            })
+        </script>
+    @endpush
 @endif
 
 @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+    @push('scripts')
+    <script type="text/javascript">
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            html: '@foreach ($errors->all() as $error){{ $error }}<br/>@endforeach'
+        })
+    </script>
+    @endpush
 @endif
 
 @if (session('failures'))
@@ -28,7 +36,7 @@
 <script>
     window.setTimeout(function() {
         $(".alert").fadeTo(500, 0).slideUp(500, function(){
-            $(this).remove(); 
+            $(this).remove();
         });
     },10000);
 </script>

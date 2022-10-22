@@ -10,8 +10,10 @@ class ProfileController extends Controller
 {
     public function index() {
         $user = Auth::user();
+        $title = 'Edit Profile';
         return view('admin.profile.index',[
-            'user' => $user
+            'user' => $user,
+            'title' => $title,
         ]);
     }
     public function update(UpdateProfileRequest $request) {
@@ -21,6 +23,7 @@ class ProfileController extends Controller
             'email' => $request->email
         ]);
         return redirect()->back()->with([
+            'alert-icon' => 'success',
             'alert-type' => 'success',
             'alert-message' => 'Update Profile Success',
         ]);;
