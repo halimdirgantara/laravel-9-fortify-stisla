@@ -168,6 +168,4 @@ return [
     |
     */
 
-    'attributes' => [],
-
 ];

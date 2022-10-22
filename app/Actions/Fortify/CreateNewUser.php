@@ -20,6 +20,12 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input)
     {
+
+        $messages = [
+            'unique' => 'The :attribute has already been taken',
+            'confirmed' => 'The :attribute confirmation does not match.',
+        ];
+
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
@@ -27,21 +33,14 @@ class CreateNewUser implements CreatesNewUsers
                 'string',
                 'email',
                 'max:255',
-                Rule::unique(User::class),
-            ],
-            'subdomain' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique(User::class),
+                'unique:users',
             ],
             'password' => $this->passwordRules(),
-        ])->validate();
+        ], $messages)->validate();
 
         return User::create([
             'name' => $input['name'],
             'email' => $input['email'],
-            'subdomain' => $input['subdomain'],
             'password' => Hash::make($input['password']),
         ]);
     }
