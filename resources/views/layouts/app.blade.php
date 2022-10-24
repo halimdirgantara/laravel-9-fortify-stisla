@@ -57,6 +57,7 @@
                     @yield('main')
                 </section>
             </div>
+            @yield('modal')
             <!-- Footer -->
             @include('components.footer')
         </div>

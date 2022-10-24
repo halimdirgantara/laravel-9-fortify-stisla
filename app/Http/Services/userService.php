@@ -2,8 +2,10 @@
 
 namespace App\Http\Services;
 
+use Throwable;
 use App\Models\User;
 use App\DataTable\UserDataTable;
+use Illuminate\Support\Facades\DB;
 
 class userService {
     private $UserDataTable;
@@ -13,8 +15,23 @@ class userService {
     }
 
     public function getUsers() {
-        $data = User::latest()->get();
-        $getUserList = $this->UserDataTable->userTable($data);
-        return $getUserList;
+        $allUser = User::latest()->get();
+        return $allUser;
+    }
+
+    public function storeUser($request) {
+        try {
+            DB::beginTransaction();
+            $createUser = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+            ]);
+            DB::commit();
+            return $createUser;
+        } catch (Throwable $th) {
+            DB::rollback();
+            return false;
+        }
     }
 }
