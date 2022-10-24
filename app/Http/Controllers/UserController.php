@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\changePasswordRequest;
 use App\Http\Requests\User\UserStoreRequest;
+use App\Http\Requests\User\UserUpdateRequest;
 
 class UserController extends Controller
 {
@@ -43,16 +44,38 @@ class UserController extends Controller
         if ($createUser) {
             return redirect()->back()->with([
                 'alert-icon' => 'success',
-                'alert-type' => 'Success',
+                'alert-type' => 'Created!',
                 'alert-message' => 'Success Create New User',
             ]);
         }
-        return redirect()->bacl()->with([
+        return redirect()->back()->with([
             'alert-icon' => 'error',
             'alert-type' => 'Error',
             'alert-message' => 'Create User Failed:',
         ]);
+    }
 
+    public function edit(User $user) {
+        return view('admin.users.edit', [
+            'title' => 'Edit User',
+            'user' => $user,
+        ]);
+    }
+
+    public function update(UserUpdateRequest $request, User $user) {
+        $updateUser = $this->userService->updateUser($request, $user);
+        if ($updateUser) {
+            return redirect()->back()->with([
+                'alert-icon' => 'success',
+                'alert-type' => 'Updated!',
+                'alert-message' => 'Success Update '.$user->name,
+            ]);
+        }
+        return redirect()->back()->with([
+            'alert-icon' => 'error',
+            'alert-type' => 'Error',
+            'alert-message' => 'Create User Failed:',
+        ]);
     }
 
     public function changePassword (changePasswordRequest $request) {

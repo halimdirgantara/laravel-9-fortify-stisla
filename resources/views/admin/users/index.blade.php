@@ -18,7 +18,7 @@
                     Create New User
                 </button>
                 <div class="card-body table-responsive">
-                    <table class="table table-bordered data-table" width="100%">
+                    <table class="table table-striped table-md data-table" width="100%">
                         <thead>
                             <tr>
                                 <th>Id</th>
@@ -83,6 +83,16 @@
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]
             });
+        });
+
+        $(function () {
+            //Edit User
+            $('body').on('click touchstart','.edit', function(){
+                let id = $(this).data("id");
+                let url = window.location.href;
+                //redirect to
+                window.location.href = url+"/"+id+"/edit";
+            })
         });
     </script>
 

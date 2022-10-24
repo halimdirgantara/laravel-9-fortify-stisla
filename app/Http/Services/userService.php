@@ -34,4 +34,19 @@ class userService {
             return false;
         }
     }
+
+    public function updateUser($request, $user) {
+        try {
+            DB::beginTransaction();
+            $updateUser = $user->update([
+                'name' => $request->name,
+                'email' => $request->email
+            ]);
+            DB::commit();
+            return $updateUser;
+        } catch (Throwable $th) {
+            DB::rollback();
+            return false;
+        }
+    }
 }

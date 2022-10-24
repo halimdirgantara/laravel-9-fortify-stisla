@@ -13,9 +13,16 @@
     </div>
     <div class="section-body">
         <div class="card card-primary">
+            <div class="card-header"><a href="{{ route('user.index') }}"><button class="btn btn-sm btn-success mr-4"><i class="fas fa-arrow-left"></i> Back</button></a>
+                <h5 class="mt-2">{{ $title }}</h5>
+            </div>
             <div class="card-body">
-                <p>Full Name : {{ Auth::user()->name }}</p>
-                <p>E-Mail : {{ Auth::user()->email }}</p>
+                <form action="{{ route('user.update',$user) }}" method="POST">
+                    @csrf
+                    @method("PUT")
+                    @include('admin.users.form-control')
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
             </div>
         </div>
 
