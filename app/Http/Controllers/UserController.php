@@ -78,6 +78,23 @@ class UserController extends Controller
         ]);
     }
 
+    public function destroy(User $user) {
+        $check = $this->userService->checkUserDelete($user);
+        if($check) {
+            $user->delete();
+            return response()->json([
+                'icon'=>'success',
+                'title' => 'Success!',
+                'message' => 'Success Delete User']
+            ,200);
+        }
+        return response()->json([
+            'icon'=>'error',
+            'title' => 'Error!',
+            'message' => 'Failed to delete user!']
+        ,403);
+    }
+
     public function changePassword (changePasswordRequest $request) {
         if (Hash::check($request->old_password, Auth::user()->password)) {
             Auth::user()->fill([

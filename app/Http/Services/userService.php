@@ -6,6 +6,7 @@ use Throwable;
 use App\Models\User;
 use App\DataTable\UserDataTable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class userService {
     private $UserDataTable;
@@ -48,5 +49,13 @@ class userService {
             DB::rollback();
             return false;
         }
+    }
+
+    public function checkUserDelete($user) {
+        $authUser = Auth::user();
+        if($authUser != $user) {
+            return true;
+        }
+        return false;
     }
 }

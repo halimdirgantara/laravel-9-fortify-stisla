@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @section('title', 'Dashboard')
 
 @push('style')
@@ -83,9 +83,7 @@
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]
             });
-        });
 
-        $(function () {
             //Edit User
             $('body').on('click touchstart','.edit', function(){
                 let id = $(this).data("id");
@@ -93,6 +91,43 @@
                 //redirect to
                 window.location.href = url+"/"+id+"/edit";
             })
+
+            //Delete item
+            $('body').on('click touchstart','.delete', function(){
+                let id = $(this).data("id");
+                Swal.fire({
+                    title: 'Delete This User!',
+                    text: "Are you sure you want to delete this user?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes!',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: "DELETE",
+                            url: window.location.href+'/'+id,
+                            success: function (data) {
+                                table.draw();
+                                Swal.fire({
+                                    icon: data.icon,
+                                    title: data.title,
+                                    text: data.message,
+                                })
+                            },
+                            error: function (data) {
+                                Swal.fire({
+                                    icon: data.responseJSON.icon,
+                                    title: data.responseJSON.title,
+                                    text: data.responseJSON.message,
+                                })
+                            }
+                        });
+                    }
+                })
+            });
         });
     </script>
 
