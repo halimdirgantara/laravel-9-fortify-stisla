@@ -27,6 +27,9 @@ Route::middleware(['auth'])->group(function () {
     //Change User Password
     Route::put('user/change-password', [UserController::Class, 'changePassword'])->name('user.change_password');
 
+    //User Route Resources
+    Route::resource('user', UserController::class);
+
     //User Profile
     Route::get('profile/edit', [ProfileController::Class, 'index'])->name('profile.edit');
     Route::put('profile/update', [ProfileController::Class, 'update'])->name('profile.update');
