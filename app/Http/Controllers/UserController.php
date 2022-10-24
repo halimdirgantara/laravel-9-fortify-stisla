@@ -40,6 +40,7 @@ class UserController extends Controller
     }
 
     public function store(UserStoreRequest $request) {
+        // Save user to database
         $createUser = $this->userService->storeUser($request);
         if ($createUser) {
             return redirect()->back()->with([
@@ -50,7 +51,7 @@ class UserController extends Controller
         }
         return redirect()->back()->with([
             'alert-icon' => 'error',
-            'alert-type' => 'Error',
+            'alert-type' => 'Failed!',
             'alert-message' => 'Create User Failed:',
         ]);
     }
@@ -63,6 +64,7 @@ class UserController extends Controller
     }
 
     public function update(UserUpdateRequest $request, User $user) {
+        // update user to database
         $updateUser = $this->userService->updateUser($request, $user);
         if ($updateUser) {
             return redirect()->back()->with([
@@ -79,6 +81,7 @@ class UserController extends Controller
     }
 
     public function destroy(User $user) {
+        // Check user before deleting user
         $check = $this->userService->checkUserDelete($user);
         if($check) {
             $user->delete();

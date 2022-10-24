@@ -10,8 +10,19 @@
             <li class="menu-header">Dashboard</li>
             <li class="{{ Request::is('dashboard') ? 'active' : '' }}">
                 <a class="nav-link"
-                    href="#"><i class="fas fa-fire"></i> <span>Dashboard</span></a>
+                    href="{{ route('dashboard') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a>
             </li>
+            <li class="dropdown">
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-wrench"></i>
+                    <span>Master Data</span></a>
+                <ul class="dropdown-menu" style="display: block;">
+                    <li class="{{ Request::is('user') ? 'active' : '' }}"><a
+                        class="nav-link " href="{{ route('user.index') }}"><i class="fas fa-users"></i>
+                        <span>User</span></a></li>
+                </ul>
+            </li>
+
+
         </ul>
     </aside>
 </div>
