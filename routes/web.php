@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LanguangeController;
+use App\Http\Controllers\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Route::middleware(['auth'])->group(function () {
 
     //User Route Resources
     Route::resource('user', UserController::class);
+    Route::resource('permission', PermissionController::class);
 
     //User Profile
     Route::get('profile/edit', [ProfileController::Class, 'index'])->name('profile.edit');

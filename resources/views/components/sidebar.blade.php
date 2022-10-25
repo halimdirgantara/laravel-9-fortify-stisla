@@ -19,6 +19,9 @@
                     <li class="{{ Request::is('user') ? 'active' : '' }}"><a
                         class="nav-link " href="{{ route('user.index') }}"><i class="fas fa-users"></i>
                         <span>User</span></a></li>
+                    <li class="{{ Request::is('permission') ? 'active' : '' }}"><a
+                        class="nav-link " href="{{ route('permission.index') }}"><i class="fas fa-key"></i>
+                        <span>Permission</span></a></li>
                 </ul>
             </li>
 
