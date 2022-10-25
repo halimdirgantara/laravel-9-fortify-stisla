@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LanguangeController;
@@ -31,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
     //User Route Resources
     Route::resource('user', UserController::class);
     Route::resource('permission', PermissionController::class);
+    Route::resource('role', RoleController::class);
 
     //User Profile
     Route::get('profile/edit', [ProfileController::Class, 'index'])->name('profile.edit');

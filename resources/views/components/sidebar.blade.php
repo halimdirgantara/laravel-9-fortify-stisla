@@ -22,6 +22,9 @@
                     <li class="{{ Request::is('permission') ? 'active' : '' }}"><a
                         class="nav-link " href="{{ route('permission.index') }}"><i class="fas fa-key"></i>
                         <span>Permission</span></a></li>
+                    <li class="{{ Request::is('role') ? 'active' : '' }}"><a
+                        class="nav-link " href="{{ route('role.index') }}"><i class="fas fa-file-signature"></i>
+                        <span>Role</span></a></li>
                 </ul>
             </li>
 
