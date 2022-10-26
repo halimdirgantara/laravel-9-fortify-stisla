@@ -20,6 +20,11 @@ class RoleService {
         return $getAllRole;
     }
 
+    public function getRoleById($id) {
+        $getRole = Role::findOrFail($id);
+        return $getRole;
+    }
+
     public function storeRole($request) {
         try {
             DB::beginTransaction();

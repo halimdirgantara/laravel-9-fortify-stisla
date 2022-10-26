@@ -24,6 +24,7 @@
                                 <th>Id</th>
                                 <th>Name</th>
                                 <th>E-Mail</th>
+                                <th>Role</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -80,6 +81,7 @@
                     {data: 'id', name: 'id',orderable: true,},
                     {data: 'name', name: 'name'},
                     {data: 'email', name: 'email'},
+                    {data: 'role', name: 'role'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]
             });

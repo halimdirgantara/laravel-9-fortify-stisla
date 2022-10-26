@@ -29,6 +29,10 @@ Route::middleware(['auth'])->group(function () {
     //Change User Password
     Route::put('user/change-password', [UserController::Class, 'changePassword'])->name('user.change_password');
 
+    //Role and Permission Changes
+    Route::get('role/{id}/assign-permission',[RoleController::class,'assignPermission'])->name('role.assign.permission');
+    Route::put('role/{id}/permission',[RoleController::class,'updatePermission'])->name('update.role.permission');
+
     //User Route Resources
     Route::resource('user', UserController::class);
     Route::resource('permission', PermissionController::class);

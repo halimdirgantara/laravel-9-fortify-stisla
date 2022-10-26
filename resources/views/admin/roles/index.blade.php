@@ -23,6 +23,7 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Name</th>
+                                <th>Permission</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -78,6 +79,7 @@
                 columns: [
                     {data: 'id', name: 'id',orderable: true,},
                     {data: 'name', name: 'name'},
+                    {data: 'permission', name: 'permission'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]
             });
@@ -88,6 +90,14 @@
                 let url = window.location.href;
                 //redirect to
                 window.location.href = url+"/"+id+"/edit";
+            })
+
+            //Assign Permission item
+            $('body').on('click touchstart','.assign', function(){
+                let id = $(this).data("id");
+                let url = window.location.href;
+                //redirect to
+                window.location.href = url+"/"+id+"/assign-permission";
             })
 
             //Delete item

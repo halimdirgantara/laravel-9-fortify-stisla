@@ -16,7 +16,7 @@ class userService {
     }
 
     public function getUsers() {
-        $allUser = User::latest()->get();
+        $allUser = User::with('roles')->get();
         return $allUser;
     }
 

@@ -19,6 +19,12 @@ class permissionService {
         return $getAllPermission;
     }
 
+    public function getPermissionByRole($id) {
+        $permission = Permission::whereRelation('roles', 'id', '=', $id)
+                        ->get('name');
+        return $permission;
+    }
+
     public function storePermission($request) {
         try {
             DB::beginTransaction();
@@ -53,5 +59,14 @@ class permissionService {
             return true;
         }
         return false;
+    }
+
+    public function syncPermisionToRole($role, $request) {
+        try {
+            $role->syncPermissions($request->permissions);
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 }

@@ -6,16 +6,24 @@ use Illuminate\Http\Request;
 use App\DataTable\RoleDataTable;
 use App\Http\Services\roleService;
 use Spatie\Permission\Models\Role;
+use App\Http\Services\permissionService;
+use Spatie\Permission\Models\Permission;
 use App\Http\Requests\Role\RoleStoreRequest;
 use App\Http\Requests\Role\RoleUpdateRequest;
 
 class RoleController extends Controller
 {
     private $roleService;
+    private $permissionService;
     private $RoleDataTable;
 
-    public function __construct(RoleDataTable $RoleDataTable, roleService $roleService) {
+    public function __construct(
+        RoleDataTable $RoleDataTable,
+        roleService $roleService,
+        permissionService $permissionService,
+        ) {
         $this->roleService = $roleService;
+        $this->permissionService = $permissionService;
         $this->RoleDataTable = $RoleDataTable;
     }
     /**
@@ -130,5 +138,32 @@ class RoleController extends Controller
             'title' => 'Error!',
             'message' => 'Failed to delete role!']
         ,403);
+    }
+
+    public function assignPermission($id)
+    {
+        return view('admin.roles.assign-permission',[
+            'title' => 'Assign Permission To Role',
+            'action' => 'Save',
+            'role' => Role::find($id),
+            'permissions' => Permission::get(),
+        ]);
+    }
+
+    public function updatePermission(Request $request, $id) {
+        $role = $this->roleService->getRoleById($id);
+        $check = $this->permissionService->syncPermisionToRole($role, $request);
+        if($check) {
+            return redirect()->back()->with([
+                'alert-icon' => 'success',
+                'alert-type' => 'Updated!',
+                'alert-message' => 'Success Assign Permission',
+            ]);
+        }
+        return redirect()->back()->with([
+            'alert-icon' => 'error',
+            'alert-type' => 'Failed!',
+            'alert-message' => 'Failed Assign Permission',
+        ]);
     }
 }
