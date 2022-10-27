@@ -20,6 +20,11 @@ class userService {
         return $allUser;
     }
 
+    public function getUserById($id) {
+        $getUser = User::findOrFail($id);
+        return $getUser;
+    }
+
     public function storeUser($request) {
         try {
             DB::beginTransaction();

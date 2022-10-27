@@ -6,7 +6,9 @@ use Throwable;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\DataTable\UserDataTable;
+use App\Http\Services\roleService;
 use App\Http\Services\userService;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\changePasswordRequest;
@@ -15,12 +17,18 @@ use App\Http\Requests\User\UserUpdateRequest;
 
 class UserController extends Controller
 {
-    private $UserService;
+    private $userService;
+    private $roleService;
     private $UserDataTable;
 
-    public function __construct(userService $userService, UserDataTable $userDataTable) {
-        $this->userService = $userService;
-        $this->userDataTable = $userDataTable;
+    public function __construct(
+        userService $userService,
+        roleService $roleService,
+        UserDataTable $userDataTable
+        ) {
+            $this->userService = $userService;
+            $this->roleService = $roleService;
+            $this->userDataTable = $userDataTable;
     }
 
     public function index(Request $request)
@@ -77,6 +85,33 @@ class UserController extends Controller
             'alert-icon' => 'error',
             'alert-type' => 'Error',
             'alert-message' => 'Create User Failed:',
+        ]);
+    }
+
+    public function assignRole($id)
+    {
+        return view('admin.users.assign-role',[
+            'title' => 'Assign Permission To Role',
+            'action' => 'Save',
+            'user' => User::find($id),
+            'roles' => Role::get(),
+        ]);
+    }
+
+    public function updateRole(Request $request, $id) {
+        $user = $this->userService->getUserById($id);
+        $check = $this->roleService->syncRoleToUser($user, $request);
+        if($check) {
+            return redirect()->back()->with([
+                'alert-icon' => 'success',
+                'alert-type' => 'Updated!',
+                'alert-message' => 'Success Assign Role',
+            ]);
+        }
+        return redirect()->back()->with([
+            'alert-icon' => 'error',
+            'alert-type' => 'Failed!',
+            'alert-message' => 'Failed Assign Role',
         ]);
     }
 

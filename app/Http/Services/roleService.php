@@ -25,6 +25,12 @@ class RoleService {
         return $getRole;
     }
 
+    public function getRoleByUser($id) {
+        $role = Role::whereRelation('users', 'id', '=', $id)
+                        ->get('name');
+        return $role;
+    }
+
     public function storeRole($request) {
         try {
             DB::beginTransaction();
@@ -59,5 +65,14 @@ class RoleService {
             return true;
         }
         return false;
+    }
+
+    public function syncRoleToUser($user, $request) {
+        try {
+            $user->AssignRole($request->role);
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 }

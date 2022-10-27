@@ -94,6 +94,14 @@
                 window.location.href = url+"/"+id+"/edit";
             })
 
+            //Assign User Role
+            $('body').on('click touchstart','.assignRole', function(){
+                let id = $(this).data("id");
+                let url = window.location.href;
+                //redirect to
+                window.location.href = url+"/"+id+"/assign-role";
+            })
+
             //Delete item
             $('body').on('click touchstart','.delete', function(){
                 let id = $(this).data("id");
