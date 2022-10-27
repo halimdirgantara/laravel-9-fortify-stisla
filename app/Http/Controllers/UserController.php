@@ -11,6 +11,8 @@ use App\Http\Services\userService;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Services\permissionService;
+use Spatie\Permission\Models\Permission;
 use App\Http\Requests\changePasswordRequest;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
@@ -19,15 +21,18 @@ class UserController extends Controller
 {
     private $userService;
     private $roleService;
+    private $permissionService;
     private $UserDataTable;
 
     public function __construct(
         userService $userService,
         roleService $roleService,
+        permissionService $permissionService,
         UserDataTable $userDataTable
         ) {
             $this->userService = $userService;
             $this->roleService = $roleService;
+            $this->permissionService = $permissionService;
             $this->userDataTable = $userDataTable;
     }
 
@@ -98,6 +103,16 @@ class UserController extends Controller
         ]);
     }
 
+    public function assignPermission($id)
+    {
+        return view('admin.users.assign-permission',[
+            'title' => 'Assign Permission To User',
+            'action' => 'Save',
+            'user' => User::find($id),
+            'permissions' => Permission::get(),
+        ]);
+    }
+
     public function updateRole(Request $request, $id) {
         $user = $this->userService->getUserById($id);
         $check = $this->roleService->syncRoleToUser($user, $request);
@@ -112,6 +127,23 @@ class UserController extends Controller
             'alert-icon' => 'error',
             'alert-type' => 'Failed!',
             'alert-message' => 'Failed Assign Role',
+        ]);
+    }
+
+    public function updatePermission(Request $request, $id) {
+        $user = $this->userService->getUserById($id);
+        $check = $this->permissionService->syncPermisionToUser($user, $request);
+        if($check) {
+            return redirect()->back()->with([
+                'alert-icon' => 'success',
+                'alert-type' => 'Updated!',
+                'alert-message' => 'Success Assign Permission',
+            ]);
+        }
+        return redirect()->back()->with([
+            'alert-icon' => 'error',
+            'alert-type' => 'Failed!',
+            'alert-message' => 'Failed Assign Permission',
         ]);
     }
 

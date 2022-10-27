@@ -32,6 +32,8 @@ Route::middleware(['auth'])->group(function () {
     //Role and Permission Changes
     Route::get('role/{id}/assign-permission',[RoleController::class,'assignPermission'])->name('role.assign.permission');
     Route::put('role/{id}/permission',[RoleController::class,'updatePermission'])->name('update.role.permission');
+    Route::get('user/{id}/assign-permission',[UserController::class,'assignPermission'])->name('user.assign.permission');
+    Route::put('user/{id}/permission',[UserController::class,'updatePermission'])->name('update.user.permission');
     Route::get('user/{id}/assign-role',[UserController::class,'assignRole'])->name('user.assign.role');
     Route::put('user/{id}/role',[UserController::class,'updateRole'])->name('update.user.role');
 

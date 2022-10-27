@@ -25,6 +25,7 @@
                                 <th>Name</th>
                                 <th>E-Mail</th>
                                 <th>Role</th>
+                                <th>Permission</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -82,6 +83,7 @@
                     {data: 'name', name: 'name'},
                     {data: 'email', name: 'email'},
                     {data: 'role', name: 'role'},
+                    {data: 'permission', name: 'permission'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]
             });
@@ -100,6 +102,14 @@
                 let url = window.location.href;
                 //redirect to
                 window.location.href = url+"/"+id+"/assign-role";
+            })
+
+            //Assign User Permission
+            $('body').on('click touchstart','.assignPermission', function(){
+                let id = $(this).data("id");
+                let url = window.location.href;
+                //redirect to
+                window.location.href = url+"/"+id+"/assign-permission";
             })
 
             //Delete item

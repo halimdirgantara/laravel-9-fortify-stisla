@@ -25,6 +25,12 @@ class permissionService {
         return $permission;
     }
 
+    public function getPermissionByUser($id) {
+        $permission = Permission::whereRelation('users', 'id', '=', $id)
+                        ->get('name');
+        return $permission;
+    }
+
     public function storePermission($request) {
         try {
             DB::beginTransaction();
@@ -64,6 +70,15 @@ class permissionService {
     public function syncPermisionToRole($role, $request) {
         try {
             $role->syncPermissions($request->permissions);
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
+    public function syncPermisionToUser($user, $request) {
+        try {
+            $user->syncPermissions($request->permissions);
             return true;
         } catch (\Throwable $th) {
             return false;
