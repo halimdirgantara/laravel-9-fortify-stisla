@@ -2,9 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LanguangeController;
 use App\Http\Controllers\PermissionController;
 
@@ -41,6 +43,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('user', UserController::class);
     Route::resource('permission', PermissionController::class);
     Route::resource('role', RoleController::class);
+
+    //Blog Resources
+    Route::resource('category', CategoryController::class);
+    Route::resource('post', PostController::class);
 
     //User Profile
     Route::get('profile/edit', [ProfileController::Class, 'index'])->name('profile.edit');
