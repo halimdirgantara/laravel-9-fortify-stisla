@@ -18,36 +18,41 @@ class SyncRoleAndPermissionSeeder extends Seeder
         $superadmin = Role::find(1); //Super admin role
         $admin = Role::find(2); //Admin role
         $editor = Role::find(3); //Editor role
-        // $author = Role::find(4); //Author role
-        // $user = Role::find(5); //Author role
+        $author = Role::find(4); //Author role
+        $user = Role::find(5); //Author role
 
         $superadmin->syncPermissions([
-            'view user',
-            'create user',
-            'edit user',
-            'update user',
-            'delete user',
-            'view role',
-            'create role',
-            'update role',
-            'edit role',
-            'delete role',
-            'view permission',
-            'create permission',
-            'edit permission',
-            'delete permission'
+            'user index',
+            'user show',
+            'user store',
+            'user edit',
+            'user update',
+            'user destroy',
+            'role index',
+            'role show',
+            'role store',
+            'role edit',
+            'role update',
+            'role destroy',
+            'permission index',
+            'permission show',
+            'permission store',
+            'permission edit',
+            'permission update',
+            'permission destroy',
+
         ]);
 
         $admin->syncPermissions([
-            'view user',
-            'create user',
-            'update user',
-            'view role',
-            'view permission',
         ]);
 
         $editor->syncPermissions([
-            'view user',
+        ]);
+
+        $author->syncPermissions([
+        ]);
+        
+        $user->syncPermissions([
         ]);
     }
 }

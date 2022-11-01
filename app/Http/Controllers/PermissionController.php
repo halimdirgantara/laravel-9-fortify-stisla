@@ -24,6 +24,15 @@ class PermissionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+        
         $title = 'Permission List';
         $newButton = 'Create New Permission';
         $getAllPermission = $this->permissionService->getAllPermission();
@@ -44,6 +53,15 @@ class PermissionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(PermissionStoreRequest $request) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+
         // Save permission to database
         $createPermission = $this->permissionService->storePermission($request);
         if ($createPermission) {
@@ -78,6 +96,15 @@ class PermissionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Permission $permission) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+
         return view('admin.permissions.edit', [
             'title' => 'Edit Permission',
             'permission' => $permission,
@@ -92,6 +119,14 @@ class PermissionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(PermissionUpdateRequest $request, Permission $permission) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
         // update user to database
         $updatePermission = $this->permissionService->updatePermission($request, $permission);
         if ($updatePermission) {
@@ -115,6 +150,14 @@ class PermissionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Permission $permission) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
         // Check user before deleting user
         $check = $this->permissionService->checkPermissionDelete($permission);
         if($check) {

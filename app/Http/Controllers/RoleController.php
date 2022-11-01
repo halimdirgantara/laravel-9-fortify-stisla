@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use  RouteHelper;
+use App\Helper\AlertHelper;
 use Illuminate\Http\Request;
 use App\DataTable\RoleDataTable;
 use App\Http\Services\roleService;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Services\permissionService;
 use Spatie\Permission\Models\Permission;
 use App\Http\Requests\Role\RoleStoreRequest;
@@ -32,6 +35,16 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request) {
+        // get route name from custom route helper
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+
         $title = 'Role List';
         $newButton = 'Create New Role';
         $getAllRole = $this->roleService->getAllRole();
@@ -52,6 +65,14 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(RoleStoreRequest $request) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
         // Save permission to database
         $createRole = $this->roleService->storeRole($request);
         if ($createRole) {
@@ -76,7 +97,14 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        //
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
     }
 
     /**
@@ -86,6 +114,15 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Role $role) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+
         return view('admin.roles.edit', [
             'title' => 'Edit Role',
             'role' => $role,
@@ -100,6 +137,14 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(RoleUpdateRequest $request, Role $role) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
         // update user to database
         $updateRole = $this->roleService->updateRole($request, $role);
         if ($updateRole) {
@@ -123,6 +168,14 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Role $role) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
         // Check user before deleting role
         $check = $this->roleService->checkRoleDelete($role);
         if($check) {
@@ -142,6 +195,15 @@ class RoleController extends Controller
 
     public function assignPermission($id)
     {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+
         return view('admin.roles.assign-permission',[
             'title' => 'Assign Permission To Role',
             'action' => 'Save',
@@ -151,6 +213,15 @@ class RoleController extends Controller
     }
 
     public function updatePermission(Request $request, $id) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+        
         $role = $this->roleService->getRoleById($id);
         $check = $this->permissionService->syncPermisionToRole($role, $request);
         if($check) {
