@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Throwable;
 use App\Models\User;
+use App\Helper\RouteHelper;
 use Illuminate\Http\Request;
 use App\DataTable\UserDataTable;
 use App\Http\Services\roleService;
 use App\Http\Services\userService;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Services\permissionService;
 use Spatie\Permission\Models\Permission;
@@ -38,6 +40,15 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+
         $title = "Users List";
         // Get all users from the user services
         $AllUser = $this->userService->getUsers();
@@ -53,6 +64,14 @@ class UserController extends Controller
     }
 
     public function store(UserStoreRequest $request) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
         // Save user to database
         $createUser = $this->userService->storeUser($request);
         if ($createUser) {
@@ -70,6 +89,14 @@ class UserController extends Controller
     }
 
     public function edit(User $user) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
         return view('admin.users.edit', [
             'title' => 'Edit User',
             'user' => $user,
@@ -77,6 +104,14 @@ class UserController extends Controller
     }
 
     public function update(UserUpdateRequest $request, User $user) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
         // update user to database
         $updateUser = $this->userService->updateUser($request, $user);
         if ($updateUser) {
@@ -95,6 +130,14 @@ class UserController extends Controller
 
     public function assignRole($id)
     {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
         return view('admin.users.assign-role',[
             'title' => 'Assign Permission To Role',
             'action' => 'Save',
@@ -105,6 +148,14 @@ class UserController extends Controller
 
     public function assignPermission($id)
     {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
         return view('admin.users.assign-permission',[
             'title' => 'Assign Permission To User',
             'action' => 'Save',
@@ -114,6 +165,14 @@ class UserController extends Controller
     }
 
     public function updateRole(Request $request, $id) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
         $user = $this->userService->getUserById($id);
         $check = $this->roleService->syncRoleToUser($user, $request);
         if($check) {
@@ -131,6 +190,14 @@ class UserController extends Controller
     }
 
     public function updatePermission(Request $request, $id) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
         $user = $this->userService->getUserById($id);
         $check = $this->permissionService->syncPermisionToUser($user, $request);
         if($check) {
@@ -148,6 +215,14 @@ class UserController extends Controller
     }
 
     public function destroy(User $user) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
         // Check user before deleting user
         $check = $this->userService->checkUserDelete($user);
         if($check) {

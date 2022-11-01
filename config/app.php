@@ -215,6 +215,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+        'RouteHelper' => App\Helper\RouteHelper::class,
+
     ])->toArray(),
 
 ];

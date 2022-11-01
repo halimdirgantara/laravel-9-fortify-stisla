@@ -17,14 +17,16 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $routeCollection = Route::getRoutes()->get();
-        foreach ($routeCollection as $item) {
-            $name = $item->action;
+        // dd($routeCollection);
+        foreach ($routeCollection as $value) {
+            $name = $value->action;
             if(!empty($name['as'])) {
                 $permission = $name['as'];
-                $permission = trim(strtolower($permission));
-                $permission = preg_replace('/[\s.,-]+/', ' ', $permission);
+                $str = trim(strtolower($permission));
+                $newStr = preg_replace('/[\s.,-]+/', ' ', $str);
+                $permissions[] = $newStr;
                 Permission::create([
-                    'name' => $permission
+                    'name' => $newStr
                 ]);
             }
         }
