@@ -12,6 +12,10 @@
                 <a class="nav-link"
                     href="{{ route('dashboard') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a>
             </li>
+            <li class="{{ Request::is('category.index') ? 'active' : '' }}">
+                <a class="nav-link"
+                    href="{{ route('category.index') }}"><i class="fas fa-grip-horizontal"></i><span>Category</span></a>
+            </li>
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-wrench"></i>
                     <span>Master Data</span></a>

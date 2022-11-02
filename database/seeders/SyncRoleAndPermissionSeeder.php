@@ -40,6 +40,12 @@ class SyncRoleAndPermissionSeeder extends Seeder
             'permission edit',
             'permission update',
             'permission destroy',
+            'category index',
+            'category show',
+            'category store',
+            'category edit',
+            'category update',
+            'category destroy',
 
         ]);
 
@@ -51,7 +57,7 @@ class SyncRoleAndPermissionSeeder extends Seeder
 
         $author->syncPermissions([
         ]);
-        
+
         $user->syncPermissions([
         ]);
     }
