@@ -25,7 +25,7 @@ class PostSeeder extends Seeder
         $data = [];
 
         for ($i = 0; $i < 10; $i++) {
-            $title = $faker->title;
+            $title = $faker->sentence;
             $data[] = [
                 'title' => $title,
                 'slug' => Str::slug($title),
