@@ -46,6 +46,12 @@ class SyncRoleAndPermissionSeeder extends Seeder
             'category edit',
             'category update',
             'category destroy',
+            'post index',
+            'post show',
+            'post store',
+            'post edit',
+            'post update',
+            'post destroy',
 
         ]);
 

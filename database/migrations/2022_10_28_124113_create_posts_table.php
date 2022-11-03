@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('content');
             $table->string('image');
             $table->foreignId('category_id');
+            $table->foreignId('user_id');
             $table->string('status');
             $table->timestamps();
         });

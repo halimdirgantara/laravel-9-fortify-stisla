@@ -1,0 +1,48 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Post;
+use App\Models\User;
+use App\Models\Category;
+use Illuminate\Support\Str;
+use Faker\Generator as Faker;
+use Illuminate\Database\Seeder;
+
+class PostSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run(Faker $faker)
+    {
+
+        $users = collect(User::all()->modelKeys());
+        $categories = collect(Category::all()->modelKeys());
+        $status = collect(['Published','Draft','Process']);
+        $data = [];
+
+        for ($i = 0; $i < 10; $i++) {
+            $title = $faker->title;
+            $data[] = [
+                'title' => $title,
+                'slug' => Str::slug($title),
+                'content' => $faker->text,
+                'image' => $faker->imageUrl(),
+                'category_id' => $categories->random(),
+                'user_id' => $users->random(),
+                'status' => $status->random(),
+                'created_at' => now()->toDateTimeString(),
+                'updated_at' => now()->toDateTimeString(),
+            ];
+        }
+
+        $chunks = array_chunk($data, 100);
+        foreach ($chunks as $chunk) {
+            Post::insert($chunk);
+        }
+    }
+
+}
