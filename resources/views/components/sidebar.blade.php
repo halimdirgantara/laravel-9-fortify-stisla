@@ -12,6 +12,10 @@
                 <a class="nav-link"
                     href="{{ route('dashboard') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a>
             </li>
+            <li class="{{ Request::is('post.index') ? 'active' : '' }}">
+                <a class="nav-link"
+                    href="{{ route('post.index') }}"><i class="fas fa-file"></i><span>Post</span></a>
+            </li>
             <li class="{{ Request::is('category.index') ? 'active' : '' }}">
                 <a class="nav-link"
                     href="{{ route('category.index') }}"><i class="fas fa-grip-horizontal"></i><span>Category</span></a>

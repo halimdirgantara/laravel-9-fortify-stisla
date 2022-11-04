@@ -22,7 +22,7 @@
     <select name="category" id="category" class="form-control select2">
         <option value="" selected>--Select Category --</option>
         @foreach ($categories as $category)
-            <option {{ $post->categories->isEmpty() ?  '' : ($post->rolecategoriess[0]->name == $category->name ? 'selected' : '') }} value="{{ $category->id }}">{{ $category->name }} </option>
+            <option  value="{{ $category->id }}">{{ $category->name }} </option>
         @endforeach
     </select>
     @error('permission')

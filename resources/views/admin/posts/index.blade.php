@@ -63,6 +63,26 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body text-center">
+                        <img class="img-responsive" id="imagePreview" src="" alt="" style="margin-top:10px; margin-bottom:10px; max-height: 80vh; max-width: 80vh;" >
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                        <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
@@ -71,6 +91,7 @@
     <!-- Page Specific JS File -->
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
 
     <script>
         $(function () {
@@ -81,12 +102,23 @@
                 columns: [
                     {data: 'id', name: 'id',orderable: true,},
                     {data: 'image', name: 'image'},
-                    {data: 'name', name: 'name'},
+                    {data: 'title', name: 'title'},
                     {data: 'content', name: 'content'},
                     {data: 'category', name: 'category'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]
             });
+
+            //Show Post Image
+            $('body').on('click touchstart','.showImage', function(){
+                let slug = $(this).data("slug");
+                let url = $(this).data("url");
+                console.log(slug);
+                console.log(url);
+                document.getElementById('imagePreview').alt = slug;
+                document.getElementById('imagePreview').src = url;
+
+            })
 
             //Edit User
             $('body').on('click touchstart','.edit', function(){

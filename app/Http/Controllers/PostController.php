@@ -2,18 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Helper\RouteHelper;
 use Illuminate\Http\Request;
+use App\DataTable\PostDataTable;
+use App\Http\Services\postService;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Services\categoryService;
 
 class PostController extends Controller
 {
+    private $postService;
+    private $categoryService;
+    private $PostDataTable;
+
+    public function __construct(
+        PostDataTable $PostDataTable,
+        postService $postService,
+        categoryService $categoryService
+        ) {
+            $this->postService = $postService;
+            $this->categoryService = $categoryService;
+            $this->PostDataTable = $PostDataTable;
+        }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        // get route name from custom route helper
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+
+        $title = 'Post List';
+        $newButton = 'Create New Post';
+        $getAllPost = $this->postService->getAllPost();
+        $getAllCategory = $this->categoryService->getAllCategory();
+        if($request->ajax()) {
+            return $this->PostDataTable->postTable($getAllPost);
+        }
+        return view('admin.posts.index',[
+            'title' => $title,
+            'newButton' => $newButton,
+            'categories' => $getAllCategory,
+            'post' => new Post(),
+        ]);
     }
 
     /**
