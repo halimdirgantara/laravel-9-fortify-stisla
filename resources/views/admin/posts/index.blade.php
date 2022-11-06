@@ -14,9 +14,9 @@
     <div class="section-body">
         <div class="card card-primary">
             <div class="card-body">
-                <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#formModal">
+                <a href="{{ route('post.create') }}" class="btn btn-success btn-lg" >
                     {{ $newButton }}
-                </button>
+                </a>
                 <div class="card-body table-responsive">
                     <table class="table table-striped data-table" width="100%">
                         <thead>
@@ -41,29 +41,8 @@
 @endsection
 
 @section('modal')
-    <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="formModalLabel">{{ $title }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('post.store') }}" method="POST">
-                        @csrf
-                        @include('admin.posts.form-control')
-                </div>
-                <div class="modal-footer justify-content-between">
-                        <button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -74,11 +53,12 @@
                 </div>
                 <div class="modal-body">
                     <div class="card-body text-center">
-                        <img class="img-responsive" id="imagePreview" src="" alt="" style="margin-top:10px; margin-bottom:10px; max-height: 80vh; max-width: 80vh;" >
+                        <img class="img-responsive" id="imagePreview" src="" alt=""
+                            style="max-height: 80vh; max-width: 80vw;">
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                        <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -94,23 +74,43 @@
 
 
     <script>
-        $(function () {
+        $(function() {
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('post.index') }}",
-                columns: [
-                    {data: 'id', name: 'id',orderable: true,},
-                    {data: 'image', name: 'image'},
-                    {data: 'title', name: 'title'},
-                    {data: 'content', name: 'content'},
-                    {data: 'category', name: 'category'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                columns: [{
+                        data: 'id',
+                        name: 'id',
+                        orderable: true,
+                    },
+                    {
+                        data: 'image',
+                        name: 'image'
+                    },
+                    {
+                        data: 'title',
+                        name: 'title'
+                    },
+                    {
+                        data: 'content',
+                        name: 'content'
+                    },
+                    {
+                        data: 'category',
+                        name: 'category'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
                 ]
             });
 
             //Show Post Image
-            $('body').on('click touchstart','.showImage', function(){
+            $('body').on('click touchstart', '.showImage', function() {
                 let slug = $(this).data("slug");
                 let url = $(this).data("url");
                 console.log(slug);
@@ -121,15 +121,15 @@
             })
 
             //Edit User
-            $('body').on('click touchstart','.edit', function(){
+            $('body').on('click touchstart', '.edit', function() {
                 let id = $(this).data("id");
                 let url = window.location.href;
                 //redirect to
-                window.location.href = url+"/"+id+"/edit";
+                window.location.href = url + "/" + id + "/edit";
             })
 
             //Delete item
-            $('body').on('click touchstart','.delete', function(){
+            $('body').on('click touchstart', '.delete', function() {
                 let id = $(this).data("id");
                 Swal.fire({
                     title: 'Delete This Post!',
@@ -144,8 +144,8 @@
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             type: "DELETE",
-                            url: window.location.href+'/'+id,
-                            success: function (data) {
+                            url: window.location.href + '/' + id,
+                            success: function(data) {
                                 table.draw();
                                 Swal.fire({
                                     icon: data.icon,
@@ -153,7 +153,7 @@
                                     text: data.message,
                                 })
                             },
-                            error: function (data) {
+                            error: function(data) {
                                 Swal.fire({
                                     icon: data.responseJSON.icon,
                                     title: data.responseJSON.title,
@@ -166,5 +166,4 @@
             });
         });
     </script>
-
 @endpush

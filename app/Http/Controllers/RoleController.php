@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use  RouteHelper;
 use App\Helper\AlertHelper;
+use App\Helper\RouteHelper;
 use Illuminate\Http\Request;
 use App\DataTable\RoleDataTable;
 use App\Http\Services\roleService;
@@ -221,7 +221,7 @@ class RoleController extends Controller
                 'alert-message' => 'You are not authorized to view '.$routeName.' page',
             ]);
         }
-        
+
         $role = $this->roleService->getRoleById($id);
         $check = $this->permissionService->syncPermisionToRole($role, $request);
         if($check) {

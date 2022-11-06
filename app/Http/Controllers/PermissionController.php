@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\RouteHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use App\DataTable\PermissionDataTable;
 use App\Http\Services\permissionService;
 use Spatie\Permission\Models\Permission;
@@ -32,7 +34,7 @@ class PermissionController extends Controller
                 'alert-message' => 'You are not authorized to view '.$routeName.' page',
             ]);
         }
-        
+
         $title = 'Permission List';
         $newButton = 'Create New Permission';
         $getAllPermission = $this->permissionService->getAllPermission();

@@ -46,15 +46,12 @@ class PostController extends Controller
         $title = 'Post List';
         $newButton = 'Create New Post';
         $getAllPost = $this->postService->getAllPost();
-        $getAllCategory = $this->categoryService->getAllCategory();
         if($request->ajax()) {
             return $this->PostDataTable->postTable($getAllPost);
         }
         return view('admin.posts.index',[
             'title' => $title,
             'newButton' => $newButton,
-            'categories' => $getAllCategory,
-            'post' => new Post(),
         ]);
     }
 
@@ -63,9 +60,25 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        // get route name from custom route helper
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+
+        $title = 'Create Post';
+        $getAllCategory = $this->categoryService->getAllCategory();
+        return view('admin.posts.create',[
+            'title' => $title,
+            'categories' => $getAllCategory,
+            'post' => new Post(),
+        ]);
     }
 
     /**

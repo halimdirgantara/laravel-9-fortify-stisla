@@ -31,7 +31,10 @@
 </div>
 <div class="form-group">
     <label for="name">Image</label>
-    <input id="name" type="file" class="form-control" required name="name" value="{{ old('name') ?? $post->name }}" >
+    <div id="image-preview" class="image-preview">
+        <label for="image-upload" id="image-label">Choose File</label>
+        <input type="file" name="image" id="image-upload">
+    </div>
 </div>
 @error('name')
     <div class="alert alert-danger mt-2">
