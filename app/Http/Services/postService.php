@@ -5,15 +5,18 @@ namespace App\Http\Services;
 use App\Models\Post;
 use Illuminate\Support\Str;
 use App\DataTable\PostDataTable;
+use App\Http\Services\fileService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 
 class postService {
     private $PostDataTable;
+    private $fileService;
 
-    public function __construct(PostDataTable $PostDataTable) {
+    public function __construct(PostDataTable $PostDataTable, fileService $fileService) {
         $this->PostDataTable = $PostDataTable;
+        $this->fileService = $fileService;
     }
 
     public function getAllPost() {
@@ -34,17 +37,22 @@ class postService {
     public function storePost($request) {
         try {
             DB::beginTransaction();
-            $createPost = Post::create([
-                'title' => $request->title,
-                'slug' => STR::slug($request->title),
-                'content' => $request->content,
-                'image' => $request->image,
-                'category_id' => $request->category,
-                'user_id' => Auth::user()->id,
-                'status' => $request->status,
-            ]);
-            DB::commit();
-            return $createPost;
+            $image_path = $this->fileService->saveImage($request->file('image'));
+            if($image_path) {
+                $createPost = Post::create([
+                    'title' => $request->title,
+                    'slug' => STR::slug($request->title),
+                    'content' => $request->content,
+                    'image' => $image_path,
+                    'category_id' => $request->category,
+                    'user_id' => Auth::user()->id,
+                    'status' => $request->status,
+                ]);
+                DB::commit();
+                return $createPost;
+            }
+            DB::rollback();
+            return false;
         } catch (Throwable $th) {
             DB::rollback();
             return false;

@@ -101,7 +101,7 @@ class PostController extends Controller
         // Save post to database
         $createPost = $this->postService->storePost($request);
         if ($createPost) {
-            return redirect()->back()->with([
+            return redirect()->route('post.index')->with([
                 'alert-icon' => 'success',
                 'alert-type' => 'Created!',
                 'alert-message' => 'Success Create New Post',
