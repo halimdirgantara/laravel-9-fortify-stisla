@@ -9,6 +9,7 @@ use App\DataTable\PostDataTable;
 use App\Http\Services\postService;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Services\categoryService;
+use App\Http\Requests\Post\PostStoreRequest;
 
 class PostController extends Controller
 {
@@ -87,9 +88,30 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostStoreRequest $request)
     {
-        //
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+        // Save post to database
+        $createPost = $this->postService->storePost($request);
+        if ($createPost) {
+            return redirect()->back()->with([
+                'alert-icon' => 'success',
+                'alert-type' => 'Created!',
+                'alert-message' => 'Success Create New Post',
+            ]);
+        }
+        return redirect()->back()->with([
+            'alert-icon' => 'error',
+            'alert-type' => 'Failed!',
+            'alert-message' => 'Create Post Failed:',
+        ]);
     }
 
     /**

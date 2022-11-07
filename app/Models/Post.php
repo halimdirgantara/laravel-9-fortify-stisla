@@ -2,21 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Post extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'title',
         'slug',
         'content',
         'image',
         'category_id',
         'user_id',
         'status',
+    ];
+
+    protected $casts = [
+        'status' => StatusEnum::class
     ];
 
     public function category()
@@ -28,5 +33,6 @@ class Post extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
 
 }

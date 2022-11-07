@@ -3,8 +3,10 @@
 namespace App\Http\Services;
 
 use App\Models\Post;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use App\DataTable\PostDataTable;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 
 class postService {
@@ -15,7 +17,7 @@ class postService {
     }
 
     public function getAllPost() {
-        $getAllPost = Post::with('category')->get();
+        $getAllPost = Post::with('category')->latest();
         return $getAllPost;
     }
 
@@ -33,11 +35,12 @@ class postService {
         try {
             DB::beginTransaction();
             $createPost = Post::create([
-                'name' => $request->name,
-                'slug' => $request->slug,
+                'title' => $request->title,
+                'slug' => STR::slug($request->title),
                 'content' => $request->content,
                 'image' => $request->image,
-                'category_id' => $request->category_id,
+                'category_id' => $request->category,
+                'user_id' => Auth::user()->id,
                 'status' => $request->status,
             ]);
             DB::commit();

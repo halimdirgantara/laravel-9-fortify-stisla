@@ -40,7 +40,6 @@ class ChangePasswordRequest extends FormRequest
             'confirm_new_password.required' => 'Required New Password',
             'confirm_new_password.same' => 'Password confirmation not same with New Password',
             'confirm_new_password.different' => 'New Password must be different with Old Password',
-
         ];
     }
 }

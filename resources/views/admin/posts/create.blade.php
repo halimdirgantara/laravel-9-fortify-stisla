@@ -5,6 +5,7 @@
 @push('style')
     <!-- CSS Libraries -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 @endpush
 
 @section('main')
@@ -19,7 +20,7 @@
                 <h5 class="mt-2">{{ $title }}</h5>
             </div>
             <div class="card-body">
-                <form action="{{ route('post.create') }}" method="POST">
+                <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @include('admin.posts.form-control')
                     <button type="submit" class="btn btn-primary">Create</button>
@@ -35,8 +36,10 @@
     <!-- JS Libraies -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('library/upload-preview/upload-preview.js') }}"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <!-- Page Specific JS File -->
     <script>
+        
         $.uploadPreview({
             input_field: "#image-upload", // Default: .image-upload
             preview_box: "#image-preview", // Default: .image-preview
@@ -45,6 +48,13 @@
             label_selected: "Change File", // Default: Change File
             no_label: false, // Default: false
             success_callback: null // Default: null
+        });
+
+        var quill = new Quill('#editor', {
+            theme: 'snow'
+        });
+        quill.on('text-change', function(delta, oldDelta, source) {
+            document.getElementById("content").value = quill.root.innerHTML;
         });
     </script>
 @endpush

@@ -1,17 +1,20 @@
 <div class="form-group">
-    <label for="name">Name</label>
-    <input id="name" type="text" class="form-control" required name="name" value="{{ old('name') ?? $post->name }}" autofocus>
+    <label for="title">Title</label>
+    <input id="title" type="text" class="form-control" required name="title" value="{{ old('title') ?? $post->title }}" autofocus>
 </div>
-@error('name')
+@error('title')
     <div class="alert alert-danger mt-2">
         {{ $message }}
     </div>
 @enderror
 <div class="form-group">
-    <label for="name">Content</label>
-    <input id="name" type="text" class="form-control" required name="name" value="{{ old('name') ?? $post->name }}" >
+    <label for="content">Content</label>
+    <div id="editor" name="editor">
+        {!! old('content') ?? $post->content !!}
+    </div>
+    <input type="hidden" id="content" name="content"></input>
 </div>
-@error('name')
+@error('content')
     <div class="alert alert-danger mt-2">
         {{ $message }}
     </div>
@@ -22,22 +25,35 @@
     <select name="category" id="category" class="form-control select2">
         <option value="" selected>--Select Category --</option>
         @foreach ($categories as $category)
-            <option  value="{{ $category->id }}">{{ $category->name }} </option>
+            <option {{ old('category') == $category->id ? 'selected' : '' }} value="{{ $category->id }}">{{ $category->name }} </option>
         @endforeach
     </select>
-    @error('permission')
+    @error('category')
         <div class="mt-2 text-danger">{{ $message }}</div>
     @enderror
 </div>
 <div class="form-group">
-    <label for="name">Image</label>
+    <label for="image">Image</label>
     <div id="image-preview" class="image-preview">
         <label for="image-upload" id="image-label">Choose File</label>
         <input type="file" name="image" id="image-upload">
     </div>
 </div>
-@error('name')
+@error('image')
     <div class="alert alert-danger mt-2">
         {{ $message }}
     </div>
 @enderror
+<div class="form-group">
+    <label for="status">Statuss</label>
+    <br>
+    <select name="status" id="status" class="form-control select2">
+        <option value="" selected>--Select Status --</option>
+        @foreach(\App\Enums\StatusEnum::cases() as $status)
+            <option {{ old('status') == $category->value ? 'selected' : '' }} value="{{ $status->value }}">{{ $status->name }} </option>
+        @endforeach
+    </select>
+    @error('status')
+        <div class="mt-2 text-danger">{{ $message }}</div>
+    @enderror
+</div>
