@@ -62,11 +62,24 @@ class postService {
     public function updatePost($request, $post) {
         try {
             DB::beginTransaction();
+            $image_path = $this->fileService->saveImage($request->file('image'));
+            if($image_path) {
+                $updatePost = $post->update([
+                    'name' => $request->name,
+                    'slug' => $request->slug,
+                    'content' => $request->content,
+                    'image' => $request->image,
+                    'category_id' => $request->category_id,
+                    'status' => $request->status,
+                ]);
+                DB::commit();
+                return $updatePost;
+            }
             $updatePost = $post->update([
                 'name' => $request->name,
                 'slug' => $request->slug,
                 'content' => $request->content,
-                'image' => $request->image,
+                'image' => $post->image,
                 'category_id' => $request->category_id,
                 'status' => $request->status,
             ]);

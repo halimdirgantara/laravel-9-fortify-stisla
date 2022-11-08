@@ -131,9 +131,24 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+        
+        $title = 'Edit Post';
+        $getAllCategory = $this->categoryService->getAllCategory();
+        return view('admin.posts.edit',[
+            'title' => $title,
+            'categories' => $getAllCategory,
+            'post' => $post,
+        ]);
     }
 
     /**

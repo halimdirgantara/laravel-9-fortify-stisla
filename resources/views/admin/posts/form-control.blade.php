@@ -25,7 +25,7 @@
     <select name="category" id="category" class="form-control select2">
         <option value="" selected>--Select Category --</option>
         @foreach ($categories as $category)
-            <option {{ old('category') == $category->id ? 'selected' : '' }} value="{{ $category->id }}">{{ $category->name }} </option>
+            <option {{ !empty($post->category) ? ($post->category->name == $category->name ? 'selected' : '') : '' }} value="{{ $category->id }}">{{ $category->name }} </option>
         @endforeach
     </select>
     @error('category')
@@ -34,7 +34,7 @@
 </div>
 <div class="form-group">
     <label for="image">Image</label>
-    <div id="image-preview" class="image-preview">
+    <div id="image-preview" class="image-preview" style="background-repeat: no-repeat; background-size: cover;background-image: url('{{  asset(Storage::url($post->image)) }}')">
         <label for="image-upload" id="image-label">Choose File</label>
         <input type="file" name="image" id="image-upload">
     </div>
@@ -45,12 +45,12 @@
     </div>
 @enderror
 <div class="form-group">
-    <label for="status">Statuss</label>
+    <label for="status">Status</label>
     <br>
     <select name="status" id="status" class="form-control select2">
         <option value="" selected>--Select Status --</option>
         @foreach(\App\Enums\StatusEnum::cases() as $status)
-            <option {{ old('status') == $category->value ? 'selected' : '' }} value="{{ $status->value }}">{{ $status->name }} </option>
+            <option {{ !empty($post->status) ? ($post->status->value == $status->value ? 'selected' : '') : '' }} value="{{ $status->value }}">{{ $status->name }} </option>
         @endforeach
     </select>
     @error('status')
