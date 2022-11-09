@@ -40,6 +40,9 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <!-- Page Specific JS File -->
     <script>
+        $( document ).ready(function() {
+            
+        });
         $.uploadPreview({
             input_field: "#image-upload", // Default: .image-upload
             preview_box: "#image-preview", // Default: .image-preview

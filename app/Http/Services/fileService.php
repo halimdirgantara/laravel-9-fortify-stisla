@@ -12,4 +12,12 @@ class fileService {
         return false;
     }
 
+    public function deleteImage($image) {
+        if(!empty($image)) {
+            $image_path = $image->store('post','public');
+            return $image_path;
+        }
+        return false;
+    }
+
 }

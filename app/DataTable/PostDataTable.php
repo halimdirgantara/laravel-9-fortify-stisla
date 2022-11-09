@@ -3,6 +3,7 @@
 namespace App\DataTable;
 use Illuminate\Support\Str;
 use App\Http\Services\postService;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class PostDataTable {
@@ -11,7 +12,7 @@ class PostDataTable {
         return Datatables::of($data)
             ->addIndexColumn()
             ->editColumn('image', function($row){
-                $image = '<a href="#" class="showImage" data-slug="'.$row->slug.'" data-url="'.$row->image.'" data-toggle="modal" data-target="#imageModal"><img src="'.$row->image.'" height="75" alt="'.$row->slug.'" /></a>';
+                $image = '<a href="#" class="showImage" data-slug="'.$row->slug.'" data-url="'.asset(Storage::url($row->image)).'" data-toggle="modal" data-target="#imageModal"><img src="'.asset(Storage::url($row->image)).'" height="75" alt="'.$row->slug.'" /></a>';
                 return $image;
             })
             ->editColumn('content', function($row){

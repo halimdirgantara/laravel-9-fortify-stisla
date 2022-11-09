@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Post;
 
+use App\Enums\StatusEnum;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostUpdateRequest extends FormRequest
@@ -24,11 +26,22 @@ class PostUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
-            'content' => 'required',
-            'image' => 'required|image|max:2048',
-            'category_id' => 'required|exists:categories,id',
-            'status'    => 'required',
+            'title' => 'required',
+            'image' => 'image|max:2048',
+            'category' => 'required|exists:categories,id',
+            'status'    => new Enum(StatusEnum::class),
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'title.required' => 'Title can not be empty',
+            'image.image' => 'Only images are allowed',
+            'image.max' => 'Image file max size 2MB',
+            'category_id.required' => 'Category can not be empty',
+            'category_id.exist' => 'Category not exists',
+            'status.required' => 'Status can not be empty',
         ];
     }
 }

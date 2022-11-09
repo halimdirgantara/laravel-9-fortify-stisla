@@ -10,6 +10,7 @@ use App\Http\Services\postService;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Services\categoryService;
 use App\Http\Requests\Post\PostStoreRequest;
+use App\Http\Requests\Post\PostUpdateRequest;
 
 class PostController extends Controller
 {
@@ -141,7 +142,7 @@ class PostController extends Controller
                 'alert-message' => 'You are not authorized to view '.$routeName.' page',
             ]);
         }
-        
+
         $title = 'Edit Post';
         $getAllCategory = $this->categoryService->getAllCategory();
         return view('admin.posts.edit',[
@@ -158,9 +159,31 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostUpdateRequest $request, Post $post)
     {
-        //
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+        // update user to database
+        $fileImage = $request->file('image');
+        $updatePost = $this->postService->updatePost($request, $post, $fileImage);
+        if ($updatePost) {
+            return redirect()->back()->with([
+                'alert-icon' => 'success',
+                'alert-type' => 'Updated!',
+                'alert-message' => 'Success Updated Post '.$post->title,
+            ]);
+        }
+        return redirect()->back()->with([
+            'alert-icon' => 'error',
+            'alert-type' => 'Error',
+            'alert-message' => 'Update Post Failed:',
+        ]);
     }
 
     /**
