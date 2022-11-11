@@ -69,6 +69,7 @@ class postService
         try {
             DB::beginTransaction();
             $image_path = $this->fileService->saveImage($fileImage);
+            !empty($fileImage) ? $this->fileService->deleteImage($post->image) : '';
             $updatePost = $post->update([
                 'title' => $request->title,
                 'slug' => STR::slug($request->title),
@@ -88,8 +89,9 @@ class postService
     public function checkPostDelete($post)
     {
         $checkPost = Post::find($post->id);
-        if ($checkPost->isEmpty()) {
-            return true;
+        if (!empty($checkPost)) {
+            $postImageDelete = $this->fileService->deleteImage($post->image);
+            return $postImageDelete;
         }
         return false;
     }

@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Helper\RouteHelper;
 use Illuminate\Http\Request;
 use App\DataTable\PostDataTable;
+use App\Http\Services\fileService;
 use App\Http\Services\postService;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Services\categoryService;
@@ -15,15 +16,18 @@ use App\Http\Requests\Post\PostUpdateRequest;
 class PostController extends Controller
 {
     private $postService;
+    private $fileService;
     private $categoryService;
     private $PostDataTable;
 
     public function __construct(
         PostDataTable $PostDataTable,
         postService $postService,
+        fileService $fileService,
         categoryService $categoryService
         ) {
             $this->postService = $postService;
+            $this->fileService = $fileService;
             $this->categoryService = $categoryService;
             $this->PostDataTable = $PostDataTable;
         }
@@ -192,8 +196,29 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy(Post $post) {
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+        // Check user before deleting user
+        $check = $this->postService->checkPostDelete($post);
+        if($check) {
+            $post->delete();
+            return response()->json([
+                'icon'=>'success',
+                'title' => 'Success!',
+                'message' => 'Success Delete Post']
+            ,200);
+        }
+        return response()->json([
+            'icon'=>'error',
+            'title' => 'Error!',
+            'message' => 'Failed to delete post!']
+        ,403);
     }
 }
