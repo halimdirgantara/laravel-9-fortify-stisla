@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Models\Post;
+use App\Enums\StatusEnum;
 use Illuminate\Http\Request;
 use App\Http\Services\postService;
 use App\Http\Controllers\Controller;
-use App\Enums\StatusEnum;
 
 class BlogController extends Controller
 {

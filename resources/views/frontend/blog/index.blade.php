@@ -7,6 +7,17 @@
 @endpush
 
 @section('main')
+<div class="section-header">
+    <h1>Blog</h1>
+    <div class="section-header-breadcrumb">
+        <div class="breadcrumb-item active"><a href="{{ route('homepage') }}">Homepage</a></div>
+        <div class="breadcrumb-item"><a href="{{ route('blog') }}">Blog</a></div>
+    </div>
+</div>
+@can('post create')
+<a href="{{ route('post.create')}}" class="btn btn-primary mb-4">Add New Post</a>
+@endcan
+<div class="section-body">
     <div class="row">
         @foreach ($posts as $post)
         <div class="col-12 col-sm-6 col-md-6 col-lg-3">
@@ -34,6 +45,7 @@
         </div>
         @endforeach
     </div>
+</div>
 @endsection
 
 @section('modal')
