@@ -8,6 +8,7 @@ use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\Category;
 
 class postService
 {
@@ -34,7 +35,7 @@ class postService
 
     public function getPostBySlug($slug)
     {
-        $post = Category::where('slug', $slug)->get();
+        $post = Post::where('slug', $slug)->first();
         return $post;
     }
 

@@ -2,13 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LanguangeController;
 use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\Frontend\BlogController;
+use App\Http\Controllers\Frontend\HomepageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +23,12 @@ use App\Http\Controllers\PostController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/', [HomepageController::Class, 'index'])->name('homepage');
+Route::get('blog', [BlogController::Class, 'index'])->name('blog');
+Route::get('blog/{slug}', [BlogController::Class, 'show'])->name('blog.show');
+Route::get('blog/category', [BlogController::Class, 'category'])->name('blog.category');
+
 Route::get('/register/lang', [LanguangeController::class, 'change'])->name('changeLang');
 
 Route::middleware(['auth'])->group(function () {
