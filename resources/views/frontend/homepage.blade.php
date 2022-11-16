@@ -52,7 +52,7 @@
                                     <img class="mr-3 rounded-circle" width="50" src="{{ asset(Storage::url($post->image)) }}"
                                         alt="avatar">
                                     <div class="media-body">
-                                        <div class="media-title">{{$post->title}}</div>
+                                        <div class="media-title"><a href="{{ route('blog.show', $post->slug) }}">{{$post->title}}</a></div>
                                         <span class="text-small text-muted">{!! Str::limit($post->content, 100) !!}</span>
                                         <a href="{{ route('blog.show', $post->slug) }}">Read More <i
                                             class="fas fa-chevron-right"></i></a>
