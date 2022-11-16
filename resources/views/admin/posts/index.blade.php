@@ -26,6 +26,7 @@
                                 <th>Name</th>
                                 <th>Content</th>
                                 <th>Category</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -100,6 +101,10 @@
                     {
                         data: 'category',
                         name: 'category'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
                     },
                     {
                         data: 'action',
