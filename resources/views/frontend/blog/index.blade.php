@@ -11,7 +11,7 @@
     <h1>Blog</h1>
     <div class="section-header-breadcrumb">
         <div class="breadcrumb-item active"><a href="{{ route('homepage') }}">Homepage</a></div>
-        <div class="breadcrumb-item"><a href="{{ route('blog') }}">Blog</a></div>
+        <div class="breadcrumb-item">Blog</div>
     </div>
 </div>
 @can('post create')
