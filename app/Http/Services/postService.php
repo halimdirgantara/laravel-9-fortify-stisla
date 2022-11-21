@@ -44,7 +44,7 @@ class postService
     {
         $posts = Post::whereHas('category', function (Builder $query) use ($slug) {
             $query->where('slug', '=', $slug);
-        })->get();
+        })->latest();
         return $posts;
     }
 

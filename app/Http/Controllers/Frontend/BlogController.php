@@ -26,8 +26,7 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $status = StatusEnum::Published->value;
-        $posts = $this->postService->getAllPost()->where('status',$status)->paginate(8);
+        $posts = $this->postService->getAllPost()->where('status',StatusEnum::Published)->paginate(8);
         return view('frontend.blog.index',[
             'posts' => $posts,
         ]);
@@ -59,7 +58,7 @@ class BlogController extends Controller
 
     public function getCategory($slug)
     {
-        $posts = $this->postService->getPostByCategory($slug)->where('status',StatusEnum::Published);
+        $posts = $this->postService->getPostByCategory($slug)->where('status',StatusEnum::Published)->paginate(8);
         $category = $this->categoryService->getCategoryByName($slug);
         return view('frontend.blog.category-show',[
             'posts' => $posts,
