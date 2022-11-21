@@ -22,7 +22,8 @@
             <div class="col-lg-6">
                 <div class="card card-large-icons">
                     <div class="card-icon bg-primary text-white">
-                        <h2>{{$postCount->where('category_id', $category->id)->count()}}</h2>
+
+                        <h2>{{$postCount->where('id',$category->id)->first()->posts_count}}</h2>
                     </div>
                     <div class="card-body">
                         <h4>{{$category->name}}</h4>

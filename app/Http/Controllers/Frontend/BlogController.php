@@ -50,7 +50,7 @@ class BlogController extends Controller
     public function allCategory()
     {
         $allCategory = $this->categoryService->getAllCategory();
-        $postCount = $this->postService->getAllPost()->where('status',StatusEnum::Published);
+        $postCount = $this->categoryService->countPostCategory();
         return view('frontend.blog.category',[
             'allCategory' => $allCategory,
             'postCount' => $postCount

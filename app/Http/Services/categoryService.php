@@ -3,8 +3,10 @@
 namespace App\Http\Services;
 
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\DataTable\CategoryDataTable;
+use Illuminate\Database\Eloquent\Builder;
 
 
 class categoryService {
@@ -16,6 +18,18 @@ class categoryService {
 
     public function getAllCategory() {
         $getAllCategory = Category::get();
+        return $getAllCategory;
+    }
+
+    public function getCategoryPost() {
+        $getAllCategory = Category::with('posts')->get();
+        return $getAllCategory;
+    }
+
+    public function countPostCategory() {
+        $getAllCategory = Category::withCount(['posts' => function (Builder $query) {
+            $query->where('status', '=', 'published');
+        }])->get();
         return $getAllCategory;
     }
 
@@ -34,6 +48,7 @@ class categoryService {
             DB::beginTransaction();
             $createCategory = Category::create([
                 'name' => $request->name,
+                'slug' => Str::slug($request->name)
             ]);
             DB::commit();
             return $createCategory;
@@ -48,6 +63,7 @@ class categoryService {
             DB::beginTransaction();
             $updateCategory = $category->update([
                 'name' => $request->name,
+                'slug' => Str::slug($request->name)
             ]);
             DB::commit();
             return $updateCategory;
