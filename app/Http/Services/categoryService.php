@@ -24,8 +24,8 @@ class categoryService {
         return $category;
     }
 
-    public function getCategoryByName($name) {
-        $category = Category::where('name', $name)->get();
+    public function getCategoryByName($slug) {
+        $category = Category::where('slug', $slug)->first();
         return $category;
     }
 

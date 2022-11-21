@@ -2,13 +2,14 @@
 
 namespace App\Http\Services;
 
+use App\Models\Post;
+use App\Models\Category;
+use Illuminate\Support\Str;
 use App\DataTable\PostDataTable;
 use App\Http\Services\fileService;
-use App\Models\Post;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 class postService
 {
@@ -37,6 +38,14 @@ class postService
     {
         $post = Post::where('slug', $slug)->first();
         return $post;
+    }
+
+    public function getPostByCategory($slug)
+    {
+        $posts = Post::whereHas('category', function (Builder $query) use ($slug) {
+            $query->where('slug', '=', $slug);
+        })->get();
+        return $posts;
     }
 
     public function storePost($request)

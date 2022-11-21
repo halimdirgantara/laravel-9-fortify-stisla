@@ -17,8 +17,10 @@ class CategoryFactory extends Factory
      */
     public function definition()
     {
+        $name = fake()->word();
         return [
-            'name' => fake()->word(),
+            'name' => $name,
+            'slug' => Str::slug($name),
         ];
     }
 }

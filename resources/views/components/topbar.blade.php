@@ -7,7 +7,7 @@
         </a>
         <ul class="navbar-nav">
             <li class="nav-item active"><a href="{{ route('blog') }}" class="nav-link">Blog</a></li>
-            <li class="nav-item"><a href="{{ route('blog.category') }}" class="nav-link">Category</a></li>
+            <li class="nav-item"><a href="{{ route('blog.category.index') }}" class="nav-link">Category</a></li>
         </ul>
     </div>
     <form action="#" method="POST" class="form-inline ml-auto">

@@ -8,6 +8,7 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 use Illuminate\Database\Seeder;
+use App\Enums\StatusEnum;
 
 class PostSeeder extends Seeder
 {
@@ -21,16 +22,16 @@ class PostSeeder extends Seeder
 
         $users = collect(User::all()->modelKeys());
         $categories = collect(Category::all()->modelKeys());
-        $status = collect(['Published','Draft','Process']);
+        $status = collect(['published','draft','process']);
         $data = [];
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             $title = $faker->sentence;
             $data[] = [
                 'title' => $title,
                 'slug' => Str::slug($title),
                 'content' => $faker->text,
-                'image' => $faker->imageUrl(),
+                'image' => 'post/example-image.jpg',
                 'category_id' => $categories->random(),
                 'user_id' => $users->random(),
                 'status' => $status->random(),
