@@ -2,30 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Helper\RouteHelper;
 use Illuminate\Http\Request;
+use App\DataTable\PostDataTable;
+use App\Http\Services\fileService;
+use App\Http\Services\postService;
 use Illuminate\Support\Facades\Gate;
-use App\DataTable\PermissionDataTable;
-use App\Http\Services\permissionService;
-use Spatie\Permission\Models\Permission;
-use App\Http\Requests\Permission\PermissionStoreRequest;
-use App\Http\Requests\Permission\PermissionUpdateRequest;
+use App\Http\Services\categoryService;
+use App\Http\Requests\Post\PostStoreRequest;
+use App\Http\Requests\Post\PostUpdateRequest;
 
-class PermissionController extends Controller
+class PostController extends Controller
 {
-    private $permissionService;
-    private $PermissionDataTable;
+    private $postService;
+    private $fileService;
+    private $categoryService;
+    private $PostDataTable;
 
-    public function __construct(PermissionDataTable $PermissionDataTable, permissionService $permissionService) {
-        $this->permissionService = $permissionService;
-        $this->PermissionDataTable = $PermissionDataTable;
-    }
+    public function __construct(
+        PostDataTable $PostDataTable,
+        postService $postService,
+        fileService $fileService,
+        categoryService $categoryService
+        ) {
+            $this->postService = $postService;
+            $this->fileService = $fileService;
+            $this->categoryService = $categoryService;
+            $this->PostDataTable = $PostDataTable;
+        }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
+        // get route name from custom route helper
         $routeName = RouteHelper::getName();
         if (!Gate::allows($routeName)) {
             return redirect()->route('dashboard')->with([
@@ -35,16 +49,41 @@ class PermissionController extends Controller
             ]);
         }
 
-        $title = 'Permission List';
-        $newButton = 'Create New Permission';
-        $getAllPermission = $this->permissionService->getAllPermission();
+        $title = 'Post List';
+        $newButton = 'Create New Post';
+        $getAllPost = $this->postService->getAllPost();
         if($request->ajax()) {
-            return $this->PermissionDataTable->permissionTable($getAllPermission);
+            return $this->PostDataTable->postTable($getAllPost);
         }
-        return view('admin.permissions.index',[
+        return view('admin.posts.index',[
             'title' => $title,
             'newButton' => $newButton,
-            'permission' => new Permission(),
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request)
+    {
+        // get route name from custom route helper
+        $routeName = RouteHelper::getName();
+        if (!Gate::allows($routeName)) {
+            return redirect()->route('dashboard')->with([
+                'alert-icon' => 'error',
+                'alert-type' => 'Not Authorized!',
+                'alert-message' => 'You are not authorized to view '.$routeName.' page',
+            ]);
+        }
+
+        $title = 'Create Post';
+        $getAllCategory = $this->categoryService->getAllCategory();
+        return view('admin.posts.create',[
+            'title' => $title,
+            'categories' => $getAllCategory,
+            'post' => new Post(),
         ]);
     }
 
@@ -54,7 +93,8 @@ class PermissionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PermissionStoreRequest $request) {
+    public function store(PostStoreRequest $request)
+    {
         $routeName = RouteHelper::getName();
         if (!Gate::allows($routeName)) {
             return redirect()->route('dashboard')->with([
@@ -63,20 +103,19 @@ class PermissionController extends Controller
                 'alert-message' => 'You are not authorized to view '.$routeName.' page',
             ]);
         }
-
-        // Save permission to database
-        $createPermission = $this->permissionService->storePermission($request);
-        if ($createPermission) {
-            return redirect()->back()->with([
+        // Save post to database
+        $createPost = $this->postService->storePost($request);
+        if ($createPost) {
+            return redirect()->route('post.index')->with([
                 'alert-icon' => 'success',
                 'alert-type' => 'Created!',
-                'alert-message' => 'Success Create New Permission',
+                'alert-message' => 'Success Create New Post',
             ]);
         }
         return redirect()->back()->with([
             'alert-icon' => 'error',
             'alert-type' => 'Failed!',
-            'alert-message' => 'Create Permission Failed:',
+            'alert-message' => 'Create Post Failed:',
         ]);
     }
 
@@ -97,7 +136,8 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Permission $permission) {
+    public function edit(Post $post)
+    {
         $routeName = RouteHelper::getName();
         if (!Gate::allows($routeName)) {
             return redirect()->route('dashboard')->with([
@@ -107,9 +147,12 @@ class PermissionController extends Controller
             ]);
         }
 
-        return view('admin.permissions.edit', [
-            'title' => 'Edit Permission',
-            'permission' => $permission,
+        $title = 'Edit Post';
+        $getAllCategory = $this->categoryService->getAllCategory();
+        return view('admin.posts.edit',[
+            'title' => $title,
+            'categories' => $getAllCategory,
+            'post' => $post,
         ]);
     }
 
@@ -120,7 +163,8 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PermissionUpdateRequest $request, Permission $permission) {
+    public function update(PostUpdateRequest $request, Post $post)
+    {
         $routeName = RouteHelper::getName();
         if (!Gate::allows($routeName)) {
             return redirect()->route('dashboard')->with([
@@ -130,18 +174,19 @@ class PermissionController extends Controller
             ]);
         }
         // update user to database
-        $updatePermission = $this->permissionService->updatePermission($request, $permission);
-        if ($updatePermission) {
+        $fileImage = $request->file('image');
+        $updatePost = $this->postService->updatePost($request, $post, $fileImage);
+        if ($updatePost) {
             return redirect()->back()->with([
                 'alert-icon' => 'success',
                 'alert-type' => 'Updated!',
-                'alert-message' => 'Success Update '.$permission->name,
+                'alert-message' => 'Success Updated Post '.$post->title,
             ]);
         }
         return redirect()->back()->with([
             'alert-icon' => 'error',
             'alert-type' => 'Error',
-            'alert-message' => 'Update Permission Failed:',
+            'alert-message' => 'Update Post Failed:',
         ]);
     }
 
@@ -151,7 +196,7 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Permission $permission) {
+    public function destroy(Post $post) {
         $routeName = RouteHelper::getName();
         if (!Gate::allows($routeName)) {
             return redirect()->route('dashboard')->with([
@@ -161,19 +206,19 @@ class PermissionController extends Controller
             ]);
         }
         // Check user before deleting user
-        $check = $this->permissionService->checkPermissionDelete($permission);
+        $check = $this->postService->checkPostDelete($post);
         if($check) {
-            $permission->delete();
+            $post->delete();
             return response()->json([
                 'icon'=>'success',
                 'title' => 'Success!',
-                'message' => 'Success Delete Permission']
+                'message' => 'Success Delete Post']
             ,200);
         }
         return response()->json([
             'icon'=>'error',
             'title' => 'Error!',
-            'message' => 'Failed to delete permission!']
+            'message' => 'Failed to delete post!']
         ,403);
     }
 }

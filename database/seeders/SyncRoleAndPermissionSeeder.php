@@ -22,6 +22,12 @@ class SyncRoleAndPermissionSeeder extends Seeder
         $user = Role::find(5); //Author role
 
         $superadmin->syncPermissions([
+            'role assign permission',
+            'update role permission',
+            'user assign permission',
+            'update user permission',
+            'user assign role',
+            'update user role',
             'user index',
             'user show',
             'user store',
@@ -40,6 +46,19 @@ class SyncRoleAndPermissionSeeder extends Seeder
             'permission edit',
             'permission update',
             'permission destroy',
+            'category index',
+            'category show',
+            'category store',
+            'category edit',
+            'category update',
+            'category destroy',
+            'post index',
+            'post show',
+            'post create',
+            'post store',
+            'post edit',
+            'post update',
+            'post destroy',
 
         ]);
 
@@ -51,7 +70,7 @@ class SyncRoleAndPermissionSeeder extends Seeder
 
         $author->syncPermissions([
         ]);
-        
+
         $user->syncPermissions([
         ]);
     }

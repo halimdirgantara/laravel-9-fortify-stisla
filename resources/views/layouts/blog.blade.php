@@ -40,14 +40,11 @@
     <!-- END GA -->
 </head>
 
-<body>
+<body class="layout-3">
     <div id="app">
-        <div class="main-wrapper">
+        <div class="main-wrapper container">
             <!-- Header -->
-            @include('components.header')
-
-            <!-- Sidebar -->
-            @include('components.sidebar')
+            @include('components.topbar')
 
             <!-- Content -->
             <div class="main-content">

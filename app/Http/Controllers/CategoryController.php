@@ -2,30 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Helper\RouteHelper;
 use Illuminate\Http\Request;
+use App\DataTable\CategoryDataTable;
 use Illuminate\Support\Facades\Gate;
-use App\DataTable\PermissionDataTable;
-use App\Http\Services\permissionService;
-use Spatie\Permission\Models\Permission;
-use App\Http\Requests\Permission\PermissionStoreRequest;
-use App\Http\Requests\Permission\PermissionUpdateRequest;
+use App\Http\Services\categoryService;
+use App\Http\Requests\Category\CategoryStoreRequest;
+use App\Http\Requests\Category\CategoryUpdateRequest;
 
-class PermissionController extends Controller
+class CategoryController extends Controller
 {
-    private $permissionService;
-    private $PermissionDataTable;
+    private $categoryService;
+    private $CategoryDataTable;
 
-    public function __construct(PermissionDataTable $PermissionDataTable, permissionService $permissionService) {
-        $this->permissionService = $permissionService;
-        $this->PermissionDataTable = $PermissionDataTable;
+    public function __construct(CategoryDataTable $CategoryDataTable, categoryService $categoryService) {
+        $this->categoryService = $categoryService;
+        $this->CategoryDataTable = $CategoryDataTable;
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $routeName = RouteHelper::getName();
         if (!Gate::allows($routeName)) {
             return redirect()->route('dashboard')->with([
@@ -35,17 +36,27 @@ class PermissionController extends Controller
             ]);
         }
 
-        $title = 'Permission List';
-        $newButton = 'Create New Permission';
-        $getAllPermission = $this->permissionService->getAllPermission();
+        $title = 'Category List';
+        $newButton = 'Create New Category';
+        $getAllCategory = $this->categoryService->getAllCategory();
         if($request->ajax()) {
-            return $this->PermissionDataTable->permissionTable($getAllPermission);
+            return $this->CategoryDataTable->categoryTable($getAllCategory);
         }
-        return view('admin.permissions.index',[
+        return view('admin.categories.index',[
             'title' => $title,
             'newButton' => $newButton,
-            'permission' => new Permission(),
+            'category' => new Category(),
         ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -54,7 +65,7 @@ class PermissionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PermissionStoreRequest $request) {
+    public function store(CategoryStoreRequest $request) {
         $routeName = RouteHelper::getName();
         if (!Gate::allows($routeName)) {
             return redirect()->route('dashboard')->with([
@@ -64,19 +75,19 @@ class PermissionController extends Controller
             ]);
         }
 
-        // Save permission to database
-        $createPermission = $this->permissionService->storePermission($request);
-        if ($createPermission) {
+        // Save category to database
+        $createCategory = $this->categoryService->storeCategory($request);
+        if ($createCategory) {
             return redirect()->back()->with([
                 'alert-icon' => 'success',
                 'alert-type' => 'Created!',
-                'alert-message' => 'Success Create New Permission',
+                'alert-message' => 'Success Create New Category',
             ]);
         }
         return redirect()->back()->with([
             'alert-icon' => 'error',
             'alert-type' => 'Failed!',
-            'alert-message' => 'Create Permission Failed:',
+            'alert-message' => 'Create Category Failed:',
         ]);
     }
 
@@ -97,7 +108,7 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Permission $permission) {
+    public function edit(Category $category) {
         $routeName = RouteHelper::getName();
         if (!Gate::allows($routeName)) {
             return redirect()->route('dashboard')->with([
@@ -107,9 +118,9 @@ class PermissionController extends Controller
             ]);
         }
 
-        return view('admin.permissions.edit', [
-            'title' => 'Edit Permission',
-            'permission' => $permission,
+        return view('admin.categories.edit', [
+            'title' => 'Edit Category',
+            'category' => $category,
         ]);
     }
 
@@ -120,7 +131,7 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PermissionUpdateRequest $request, Permission $permission) {
+    public function update(CategoryUpdateRequest $request, Category $category) {
         $routeName = RouteHelper::getName();
         if (!Gate::allows($routeName)) {
             return redirect()->route('dashboard')->with([
@@ -130,18 +141,18 @@ class PermissionController extends Controller
             ]);
         }
         // update user to database
-        $updatePermission = $this->permissionService->updatePermission($request, $permission);
-        if ($updatePermission) {
+        $updateCategory = $this->categoryService->updateCategory($request, $category);
+        if ($updateCategory) {
             return redirect()->back()->with([
                 'alert-icon' => 'success',
                 'alert-type' => 'Updated!',
-                'alert-message' => 'Success Update '.$permission->name,
+                'alert-message' => 'Success Update '.$category->name,
             ]);
         }
         return redirect()->back()->with([
             'alert-icon' => 'error',
             'alert-type' => 'Error',
-            'alert-message' => 'Update Permission Failed:',
+            'alert-message' => 'Update Category Failed:',
         ]);
     }
 
@@ -151,7 +162,7 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Permission $permission) {
+    public function destroy(Category $category) {
         $routeName = RouteHelper::getName();
         if (!Gate::allows($routeName)) {
             return redirect()->route('dashboard')->with([
@@ -161,19 +172,19 @@ class PermissionController extends Controller
             ]);
         }
         // Check user before deleting user
-        $check = $this->permissionService->checkPermissionDelete($permission);
+        $check = $this->categoryService->checkCategoryDelete($category);
         if($check) {
-            $permission->delete();
+            $category->delete();
             return response()->json([
                 'icon'=>'success',
                 'title' => 'Success!',
-                'message' => 'Success Delete Permission']
+                'message' => 'Success Delete Category']
             ,200);
         }
         return response()->json([
             'icon'=>'error',
             'title' => 'Error!',
-            'message' => 'Failed to delete permission!']
+            'message' => 'Failed to delete category!']
         ,403);
     }
 }
