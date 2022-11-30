@@ -7,11 +7,10 @@ use App\Helper\RouteHelper;
 class RouteHelper
 {
     public static function getName () {
-        $varText = request()->route()->getName();
-        $newString = $varText;
-        $newString = trim(strtolower($newString));
-        $newString = preg_replace('/[\s.,-]+/', ' ', $newString);
-        return $newString;
+        $routeName = request()->route()->getName();
+        $routeName = trim(strtolower($routeName));
+        $routeName = preg_replace('/[\s.,-]+/', ' ', $routeName);
+        return $routeName;
     }
 
     public static function checkPermission() {
