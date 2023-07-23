@@ -32,7 +32,7 @@ Route::get('category/{slug}', [BlogController::Class, 'getCategory'])->name('blo
 
 Route::get('/register/lang', [LanguangeController::class, 'change'])->name('changeLang');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','middleware' => ['routepermission']])->group(function () {
     Route::prefix('admin')->group(function () {
     Route::get('dashboard', [HomeController::Class, 'index'])->name('dashboard');
     //Change User Password
